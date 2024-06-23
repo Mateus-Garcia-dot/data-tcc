@@ -1,4 +1,6 @@
 import httpx
+from datetime import datetime
+import pytz
 import pandas as pd
 from datetime import datetime
 from utilities.elastic import get_elastic_client
@@ -16,7 +18,7 @@ veiculos = [value for _, value in veiculos.items()]
 
 df = pd.DataFrame(veiculos)
 
-df['date'] = datetime.now()
+df['date'] = datetime.now(pytz.utc)
 
 df['coords'] = df.apply(lambda row: f"{row['LAT']},{row['LON']}", axis=1)
 
@@ -41,7 +43,8 @@ index_settings = {
             "SITUACAO2": { "type": "keyword" },
             "SENT": { "type": "keyword" },
             "TCOUNT": { "type": "integer" },
-            "date": { "type": "date" },
+            "date": { 
+                "type": "date" },
             "coords": { "type": "geo_point" }
         }
     }
@@ -49,5 +52,7 @@ index_settings = {
 
 if not es.indices.exists(index=index_name):
     es.indices.create(index=index_name, body=index_settings)
+
+print(df)
 
 bulk_insert(es, df, index_name)
