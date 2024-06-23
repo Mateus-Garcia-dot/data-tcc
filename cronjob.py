@@ -34,7 +34,7 @@ index_settings = {
     "mappings": {
         "properties": {
             "COD": { "type": "keyword" },
-            "REFRESH": { "type": "date", "format": "HH:mm" },
+            "REFRESH": { "type": "keyword" },
             "CODIGOLINHA": { "type": "keyword" },
             "ADAPT": { "type": "integer" },
             "TIPO_VEIC": { "type": "integer" },
